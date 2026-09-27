@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Self-hosted sync targets (GLANCEvault, WebDAV/Nextcloud) are frequently on a
+  private network behind a self-signed or locally-issued CA (e.g. a Caddy
+  "tls internal" cert for a Tailscale-only *.lab domain) that the user installs
+  by hand. Without this, the app's HttpURLConnection-based native bridge
+  (bridge/HttpBridge.kt) only trusts the system CA store per Android's default
+  since API 24, so a manually installed CA is silently rejected — surfacing as
+  an opaque status-0 network error with no indication it was a cert problem.
+-->
+<network-security-config>
+    <base-config>
+        <trust-anchors>
+            <certificates src="system" />
+            <certificates src="user" />
+        </trust-anchors>
+    </base-config>
+</network-security-config>
